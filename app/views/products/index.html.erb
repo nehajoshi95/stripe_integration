@@ -1,0 +1,46 @@
+<table class = "table table-bordered table-striped">
+ <thead>
+
+  <tr>
+   <th>Name</th>
+   <th>Price</th>
+   <th>Stripe</th>
+   <th colspan="4">Actions</th>
+
+ </tr>
+</thead>
+
+<tbody>
+  <% @products.each do |product| %>
+
+  <tr>
+    <td><%= product.name %></td>
+    <td><%= product.price %></td>
+    <td>
+    <%= form_tag charges_path do %>
+        <article>
+            <label class="amount">
+            <span>Amount: <%= hidden_field_tag(:amount, product.price ) %></span>
+            <span>Amount: <%= hidden_field_tag(:description, product.name ) %></span>
+            </label>
+        </article>
+
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+                data-description=  <%= product.name %>
+                data-amount=<%= product.price %>
+                data-locale="auto"></script>
+      <% end %>
+
+    </td>
+    <td><%=link_to 'show',product_path(product)%></td>
+    <td><%= link_to "Destroy", product_path(product), 
+            method: :delete, 
+            data: { confirm:"Are you sure that you wish to delete"} %></td>
+
+    </tr>
+  <% end %>
+<td><%=link_to 'New product',new_product_path()%></td>
+
+</tbody>
+</table>
